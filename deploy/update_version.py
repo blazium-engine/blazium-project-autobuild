@@ -6,7 +6,7 @@ import os
 commit_count = subprocess.check_output(["git", "rev-list", "--count", "HEAD"]).decode("utf-8").strip()
 
 # Define the base version (e.g., 1.0)
-base_version = "1.2"
+base_version = "1.0"
 
 # Create the version string
 version = f"{base_version}.{commit_count}"
@@ -19,22 +19,6 @@ with open("project.godot", "r") as file:
 content = re.sub(
     r'config/version="([^"]+)"',
     f'config/version="{version}"',
-    content
-)
-
-store_name = os.environ.get("STORE_NAME", "")
-
-# Update the store name
-content = re.sub(
-    r'game/store_name=""',
-    f'game/store_name="{store_name}"',
-    content
-)
-
-# Replace game/lobby_server_local=true with false if it appears
-content = re.sub(
-    r"game/lobby_server_local=true",
-    "game/lobby_server_local=false",
     content
 )
 
@@ -59,7 +43,6 @@ with open("export_presets.cfg", "w") as file:
     file.write(content)
 
 print(f"Updated android version to: {commit_count}")
-print(f"Updated store_name to: {store_name}")
 # Put it in env var GAME_VERSION
 with open("version.txt", "w") as file:
     file.write(version)
