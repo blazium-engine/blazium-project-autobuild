@@ -29,8 +29,6 @@ jobs:
           { name: "Windows Desktop arm64", os: "ubuntu-latest" },
           { name: "Linux x86_64", os: "ubuntu-latest" },
           { name: "Linux x86_32", os: "ubuntu-latest" },
-          { name: "Linux arm64", os: "ubuntu-latest" },
-          { name: "Linux arm32", os: "ubuntu-latest" },
 
           { name: "macOS", os: "macos-latest" },
           { name: "iOS", os: "macos-latest" },
@@ -51,6 +49,15 @@ jobs:
           echo "game_version=$GAME_VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Game
+        if: matrix.platform.name == 'Android' && secrets.ANDROID_KEYSTORE_BASE64 != '' ||
+            matrix.platform.name == 'iOS' && secrets.DISTRIBUTION_CERTIFICATE_BASE64 != '' ||
+            matrix.platform.name == 'macOS' ||
+            matrix.platform.name == 'Web' ||
+            matrix.platform.name == 'Windows Desktop x86_64' ||
+            matrix.platform.name == 'Windows Desktop x86_32' ||
+            matrix.platform.name == 'Windows Desktop arm64' ||
+            matrix.platform.name == 'Linux x86_64' ||
+            matrix.platform.name == 'Linux x86_32'
         uses: blazium-engine/export-blazium-game@master
         with:
           blazium-version: ${{ env.BLAZIUM_VERSION }}
@@ -69,10 +76,10 @@ jobs:
           secret-android-keystore-user: ${{ secrets.ANDROID_KEYSTORE_USER }}
           use-cache: false
 
-      - name: 📦 Upload ${{ matrix.platform.name }} Build
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: ${{ matrix.platform.name }}
-          path: build/**
-          if-no-files-found: error
+      #- name: 📦 Upload ${{ matrix.platform.name }} Build
+      #  uses: actions/upload-artifact@v4
+      #  if: always()
+      #  with:
+      #    name: ${{ matrix.platform.name }}
+      #    path: build/**
+      #    if-no-files-found: error
