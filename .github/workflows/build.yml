@@ -30,8 +30,6 @@ jobs:
           { name: "Windows Desktop arm32", os: "ubuntu-latest" },
           { name: "Linux x86_64", os: "ubuntu-latest" },
           { name: "Linux x86_32", os: "ubuntu-latest" },
-          { name: "macOS", os: "macos-latest" },
-          { name: "Web", os: "ubuntu-latest" },
 
           { name: "macOS", os: "macos-latest" },
           { name: "iOS", os: "macos-latest" },
