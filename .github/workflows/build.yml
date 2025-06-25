@@ -50,7 +50,7 @@ jobs:
 
       - name: Build Game
         # On android and iOS secrets are required
-        if: (matrix.platform.name == 'iOS' && secrets.DISTRIBUTION_CERTIFICATE_BASE64 != '') || (matrix.platform.name == 'Android' && secrets.ANDROID_KEYSTORE_BASE64 != '') || (matrix.platform.name != 'iOS' && matrix.platform.name != 'Android')
+        if: ${{ (matrix.platform.name == 'iOS' && secrets.DISTRIBUTION_CERTIFICATE_BASE64 != '') || (matrix.platform.name == 'Android' && secrets.ANDROID_KEYSTORE_BASE64 != '') || (matrix.platform.name != 'iOS' && matrix.platform.name != 'Android') }}
         uses: blazium-engine/export-blazium-game@master
         with:
           blazium-version: ${{ env.BLAZIUM_VERSION }}
