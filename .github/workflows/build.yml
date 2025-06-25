@@ -1,0 +1,88 @@
+name: Build Game
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GAME_NAME: BlaziumGame
+  BLAZIUM_VERSION: latest
+  ANDROID_PACKAGE: app.blazium.game
+
+jobs:
+  build:
+    runs-on: ${{ matrix.platform.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [
+          { name: "Windows Desktop x86_64", os: "ubuntu-latest", store-name: "steam" },
+          { name: "Windows Desktop x86_32", os: "ubuntu-latest", store-name: "steam" },
+          { name: "Windows Desktop arm64", os: "ubuntu-latest", store-name: "steam" },
+          { name: "Windows Desktop arm32", os: "ubuntu-latest", store-name: "steam" },
+          { name: "Linux x86_64", os: "ubuntu-latest", store-name: "steam" },
+          { name: "Linux x86_32", os: "ubuntu-latest", store-name: "steam" },
+          { name: "macOS", os: "macos-latest", store-name: "steam" },
+
+          { name: "Windows Desktop x86_64", os: "ubuntu-latest", store-name: "itch" },
+          { name: "Windows Desktop x86_32", os: "ubuntu-latest", store-name: "itch" },
+          { name: "Windows Desktop arm64", os: "ubuntu-latest", store-name: "itch" },
+          { name: "Windows Desktop arm32", os: "ubuntu-latest", store-name: "itch" },
+          { name: "Linux x86_64", os: "ubuntu-latest", store-name: "itch" },
+          { name: "Linux x86_32", os: "ubuntu-latest", store-name: "itch" },
+          { name: "macOS", os: "macos-latest", store-name: "itch" },
+          { name: "Web", os: "ubuntu-latest", store-name: "itch" },
+
+          { name: "macOS", os: "macos-latest", store-name: "apple-store" },
+          { name: "iOS", os: "macos-latest", store-name: "apple-store" },
+
+          { name: "Android", os: "ubuntu-latest", store-name: "google-play" },
+
+          { name: "Android", os: "ubuntu-latest", store-name: "amazon" },
+          { name: "Web", os: "ubuntu-latest", store-name: "web" },
+        ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Increment Version
+        id: set_version
+        run: |
+          python deploy/update_version.py
+          GAME_VERSION=$(cat version.txt)
+          echo "game_version=$GAME_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Game
+        uses: blazium-engine/export-blazium-game@master
+        with:
+          blazium-version: ${{ env.BLAZIUM_VERSION }}
+          game-name: ${{ env.GAME_NAME }}
+          platform-name: ${{ matrix.platform.name }}
+          secret-macos-build-certificate-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          secret-p12-password: ${{ secrets.P12_PASSWORD }}
+          secret-keychain-password: ${{ secrets.KEYCHAIN_PASSWORD }}
+          secret-ios-distribution-certificate-base64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
+          secret-ios-deploy-provision-profile-ios-base64: ${{ secrets.DEPLOY_PROVISION_PROFILE_IOS_BASE64 }}
+          secret-apple-id: ${{ secrets.APPLE_ID }}
+          secret-apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+          secret-apple-password: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          secret-android-keystore-base64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          secret-android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          secret-android-keystore-user: ${{ secrets.ANDROID_KEYSTORE_USER }}
+          use-cache: false
+
+      - name: 📦 Upload ${{ matrix.platform.name }} Build
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.platform.name }}-${{ matrix.platform.store-name }}
+          path: build/**
+          if-no-files-found: error
