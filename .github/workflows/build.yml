@@ -27,9 +27,10 @@ jobs:
           { name: "Windows Desktop x86_64", os: "ubuntu-latest" },
           { name: "Windows Desktop x86_32", os: "ubuntu-latest" },
           { name: "Windows Desktop arm64", os: "ubuntu-latest" },
-          { name: "Windows Desktop arm32", os: "ubuntu-latest" },
           { name: "Linux x86_64", os: "ubuntu-latest" },
           { name: "Linux x86_32", os: "ubuntu-latest" },
+          { name: "Linux arm64", os: "ubuntu-latest" },
+          { name: "Linux arm32", os: "ubuntu-latest" },
 
           { name: "macOS", os: "macos-latest" },
           { name: "iOS", os: "macos-latest" },
