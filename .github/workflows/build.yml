@@ -46,12 +46,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Game
-        # On android and iOS secrets are required
-        if: ${{ (matrix.platform.name == 'iOS' && env.DISTRIBUTION_CERTIFICATE_BASE64 != '') || (matrix.platform.name == 'Android' && env.ANDROID_KEYSTORE_BASE64 != '') || (matrix.platform.name != 'iOS' && matrix.platform.name != 'Android') }}
         uses: blazium-engine/export-blazium-game@master
-        env: 
-            DISTRIBUTION_CERTIFICATE_BASE64: ${{ secrets.DISTRIBUTION_CERTIFICATE_BASE64 }}
-            ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         with:
           blazium-version: ${{ env.BLAZIUM_VERSION }}
           game-name: ${{ env.GAME_NAME }}
