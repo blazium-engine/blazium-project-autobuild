@@ -2,7 +2,14 @@
 
 A starter project for building a starter blazium project on all platforms. The automated actions will build everything on `master` branch.
 
-Note: The iOS build is disabled unless you set at least Apple Team ID and Apple ID.
+Note: The iOS build is disabled unless you set at least:
+- secrets.APPLE_ID
+- secrets.APPLE_TEAM_ID
+- secrets.APP_SPECIFIC_PASSWORD
+- secrets.DEPLOY_PROVISION_PROFILE_IOS_BASE64
+- secrets.DISTRIBUTION_CERTIFICATE_BASE64
+- secrets.P12_PASSWORD
+- secrets.KEYCHAIN_PASSWORD
 
 ## Getting Started
 
@@ -24,7 +31,6 @@ For information on how to set up the secrets, refer to the [Export Blazium Game]
 Apple Secrets:
 
 - secrets.DISTRIBUTION_CERTIFICATE_BASE64
-- secrets.ANDROID_KEYSTORE_BASE64
 - secrets.BUILD_CERTIFICATE_BASE64
 - secrets.P12_PASSWORD
 - secrets.KEYCHAIN_PASSWORD
@@ -37,3 +43,4 @@ Android Secrets:
 
 - secrets.ANDROID_KEYSTORE_PASSWORD
 - secrets.ANDROID_KEYSTORE_USER
+- secrets.ANDROID_KEYSTORE_BASE64
