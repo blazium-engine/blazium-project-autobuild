@@ -1,6 +1,8 @@
 name: Build Game
 
 on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
   workflow_dispatch:
   push:
     branches:
@@ -17,6 +19,7 @@ env:
   GAME_NAME: BlaziumGame
   BLAZIUM_VERSION: latest
   ANDROID_PACKAGE: app.blazium.game
+  IOS_PACKAGE: app.blazium.game
 
 jobs:
   build:
@@ -52,6 +55,8 @@ jobs:
         with:
           blazium-version: ${{ env.BLAZIUM_VERSION }}
           game-name: ${{ env.GAME_NAME }}
+          android-package: ${{ env.ANDROID_PACKAGE }}
+          ios-package: ${{ env.IOS_PACKAGE }}
           platform-name: ${{ matrix.platform.name }}
           secret-macos-build-certificate-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           secret-p12-password: ${{ secrets.P12_PASSWORD }}
