@@ -19,7 +19,7 @@ env:
   GAME_NAME: BlaziumGame
   BLAZIUM_VERSION: latest
   ANDROID_PACKAGE: app.blazium.game
-  IOS_PACKAGE: app.blazium.game
+  IOS_PACKAGE: app.blazium.hangman
 
 jobs:
   build:
