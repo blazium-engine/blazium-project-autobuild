@@ -2,6 +2,8 @@
 
 A starter project for building a starter blazium project on all platforms. The automated actions will build everything on `master` branch.
 
+Note: The iOS build is disabled unless you set at least Apple Team ID and Apple ID.
+
 ## Getting Started
 
 If you fork this:
