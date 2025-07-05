@@ -42,13 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Increment Version
-        id: set_version
-        run: |
-          python deploy/update_version.py
-          GAME_VERSION=$(cat version.txt)
-          echo "game_version=$GAME_VERSION" >> $GITHUB_OUTPUT
-
       - name: Build Game
         # On android and iOS secrets are required
         if: ${{ (matrix.platform.name == 'iOS' && env.DISTRIBUTION_CERTIFICATE_BASE64 != '') || (matrix.platform.name == 'Android' && env.ANDROID_KEYSTORE_BASE64 != '') || (matrix.platform.name != 'iOS' && matrix.platform.name != 'Android') }}
@@ -72,11 +65,3 @@ jobs:
           secret-android-keystore-password: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           secret-android-keystore-user: ${{ secrets.ANDROID_KEYSTORE_USER }}
           use-cache: false
-
-      #- name: 📦 Upload ${{ matrix.platform.name }} Build
-      #  uses: actions/upload-artifact@v4
-      #  if: always()
-      #  with:
-      #    name: ${{ matrix.platform.name }}
-      #    path: build/**
-      #    if-no-files-found: error
